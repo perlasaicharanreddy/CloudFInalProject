@@ -248,7 +248,7 @@ def dashboard():
     data = [household_size_chart, presence_of_children_chart, income_range_chart]
     layout = go.Layout(
         title='Demographic Factors Affecting Customer Engagement',
-        xaxis=dict(title='Demographic Factor'),
+        xaxis=dict(title='Demographic Factor<br><br><p>Household size: In industries like grocery retail, household size can be an important factor in customer engagement. Larger households may require more frequent and larger purchases, and may be more likely to respond to targeted promotions and loyalty programs.</p>'),
         yaxis=dict(title='Total Spend')
     )
     fig = go.Figure(data=data, layout=layout)
