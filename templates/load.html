@@ -2,19 +2,22 @@
 
 {% block content %}
 
-  <h4>Dashboard about customer engagement</h4>
-  <div class="row">
-    <div class="col-md-12">
-      {{ graph|safe }}
+  <h3>Web page to load new data</h2>
+    <div class="container">
+      <h2>
+        Click the buttons below to load the most recent data files into the database.
+      </h2>
+      <br>
+      <form method="post" action="/load/transaction">
+        <input type="submit" value="Load Transaction Data">
+      </form>
+      <form method="post" action="/load/household">
+          <input type="submit" value="Load Household Data">
+      </form>
+      <form method="post" action="/load/product">
+        <input type="submit" value="Load Product Data">
+      </form> 
     </div>
-  </div>
-
-  {{ js_files|safe }}
-
-  <br><br>
-  <div>
-    <h2>Household size: In industries like grocery retail, household size can be an important factor in customer engagement. Larger households may require more frequent and larger purchases, and may be more likely to respond to targeted promotions and loyalty programs.</h2>
-  </div>
 
 {% endblock %}
 

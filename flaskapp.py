@@ -87,7 +87,7 @@ class Transaction(db.Model):
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Log In')
 
     
 class RegistrationForm(FlaskForm):
@@ -248,7 +248,7 @@ def dashboard():
     data = [household_size_chart, presence_of_children_chart, income_range_chart]
     layout = go.Layout(
         title='Demographic Factors Affecting Customer Engagement',
-        xaxis=dict(title='Demographic Factor<br><br><p>Household size: In industries like grocery retail, household size can be an important factor in customer engagement. Larger households may require more frequent and larger purchases, and may be more likely to respond to targeted promotions and loyalty programs.</p>'),
+        xaxis=dict(title='Demographic Factor'),
         yaxis=dict(title='Total Spend')
     )
     fig = go.Figure(data=data, layout=layout)
@@ -285,6 +285,12 @@ def search():
         data = query.all()
         return render_template('search.html', data=data, form=form, current_user=current_user)
     return render_template('search.html', form=form, current_user=current_user)
+
+@app.route('/load', methods=['GET', 'POST'])
+@login_required
+def load_data_page():
+    return render_template('load.html', current_user=current_user)
+
 
 
 
