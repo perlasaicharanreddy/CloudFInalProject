@@ -2,18 +2,24 @@
 
 {% block content %}
 
-  <h2>Customer Engagement Dashboard</h2>
-  <h4>Load Data</h4>
-    <p>Click the buttons below to load the most recent data files into the database.</p>
-    <form method="post" action="/load/transaction">
+  <h2>Dashboard about customer engagement</h2>
+    <div>
+      <p>
+        Click the buttons below to load the most recent data files into the database.
+      </p>
+      <br>
+      <form method="post" action="/load/transaction">
         <input type="submit" value="Load Transaction Data">
-    </form>
-    <form method="post" action="/load/household">
-        <input type="submit" value="Load Household Data">
-    </form>
-    <form method="post" action="/load/product">
+      </form>
+      <form method="post" action="/load/household">
+          <input type="submit" value="Load Household Data">
+      </form>
+      <form method="post" action="/load/product">
         <input type="submit" value="Load Product Data">
-    </form>
+      </form> 
+    </div>
+    
+    
   <div class="row">
     <div class="col-md-12">
       {{ graph|safe }}
@@ -43,7 +49,6 @@
     
     form {
       display: flex;
-      justify-content: center;
       margin-bottom: 50px;
     }
     

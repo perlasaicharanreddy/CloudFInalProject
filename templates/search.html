@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Search Data Pulls{% endblock %}
+{% block title %}Search on  DATA PULLs based on Hshd_num{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
   <form method="POST" action="{{ url_for('search') }}">
     {{ form.csrf_token }}
     <div class="form-group">
-      <label for="hshd_num">Household Number:</label>
+      <label for="hshd_num">Enter Household Number:</label>
       {{ form.hshd_num(class='form-control', placeholder='Enter household number') }}
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn btn-primary">Search Database</button>
   </form>
 
   {% if data %}
