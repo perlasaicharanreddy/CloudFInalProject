@@ -4,9 +4,15 @@
 
   <h2>Customer Engagement Dashboard</h2>
   <h4>Load Data</h4>
-    <p>Click the button below to load the most recent data files into the database.</p>
-    <form method="post">
-        <input type="submit" value="Load Data">
+    <p>Click the buttons below to load the most recent data files into the database.</p>
+    <form method="post" action="/load/transaction">
+        <input type="submit" value="Load Transaction Data">
+    </form>
+    <form method="post" action="/load/household">
+        <input type="submit" value="Load Household Data">
+    </form>
+    <form method="post" action="/load/product">
+        <input type="submit" value="Load Product Data">
     </form>
   <div class="row">
     <div class="col-md-12">
