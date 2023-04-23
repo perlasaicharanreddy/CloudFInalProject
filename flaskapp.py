@@ -193,7 +193,7 @@ def load_data_prod(data_dir):
 # transaction, household, product
 @app.route('/load/<file_keyword>', methods=['POST'])
 @login_required
-def load_data():
+def load_data(file_keyword):
     data_dir = os.path.join(app.root_path, 'data')
     if file_keyword == "transaction":
         load_data_trans(data_dir)
