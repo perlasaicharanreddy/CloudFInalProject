@@ -160,7 +160,7 @@ def load_data_trans(data_dir):
     if len(transaction_files) > 0:
         latest_transaction_file = max(transaction_files, key=os.path.getctime)
         transaction_df = pd.read_csv(latest_transaction_file)
-        db.session.query(Transaction).delete()
+        # db.session.query(Transaction).delete()
         for index, row in transaction_df.iterrows():
             transaction = Transaction(basket_num=row[0], hshd_num=row[1], purchase_date=row[2], product_num=row[3], spend=row[4], units=row[5], store_r=row[6], week_num=row[7], year=row[8])
             db.session.add(transaction)
@@ -172,7 +172,7 @@ def load_data_house(data_dir):
     if len(household_files) > 0:
         latest_household_file = max(household_files, key=os.path.getctime)
         household_df = pd.read_csv(latest_household_file)
-        db.session.query(Household).delete()
+        # db.session.query(Household).delete()
         for index, row in household_df.iterrows():
             household = Household(hshd_num=row[0], l=row[1], age_range=row[2], marital=row[3], income_range=row[4], homeowner=row[5], hshd_composition=row[6], hh_size=row[7], children=row[8])
             db.session.add(household)
@@ -184,7 +184,7 @@ def load_data_prod(data_dir):
     if len(product_files) > 0:
         latest_product_file = max(product_files, key=os.path.getctime)
         product_df = pd.read_csv(latest_product_file)
-        db.session.query(Product).delete()
+        # db.session.query(Product).delete()
         for index, row in product_df.iterrows():
             product = Product(product_num=row[0], department=row[1], brand_ty=row[2], natural_organic_flag=row[3])
             db.session.add(product)
