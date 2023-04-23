@@ -191,7 +191,7 @@ def load_data_prod(data_dir):
         db.session.commit()
 
 # transaction, household, product
-@app.route('/load/<file_keyword>', method=['POST'])
+@app.route('/load/<file_keyword>', methods=['POST'])
 @login_required
 def load_data():
     data_dir = os.path.join(app.root_path, 'data')
