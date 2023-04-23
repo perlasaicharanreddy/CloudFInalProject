@@ -22,7 +22,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 app.config['SECRET_KEY'] = 'C2HWGVoMGfNT5srYQg8EcMrdTimkZfAb12'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://sumanyu:cloudproject\@1234@group7-cloud.postgres.database.azure.com/cloud?sslmode=require'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://sumanyu:Postgres_123@group7-cloud.postgres.database.azure.com/cloud?sslmode=require'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/finalproject'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
