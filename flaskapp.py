@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-
+import _thread
 from flask import flash, Flask, render_template, request, redirect
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required, UserMixin
@@ -155,6 +155,39 @@ def logout():
     logout_user()
     return redirect('/')
 
+def load_data(data_dir):
+    transaction_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'transaction' in f]
+    if len(transaction_files) > 0:
+        latest_transaction_file = max(transaction_files, key=os.path.getctime)
+        transaction_df = pd.read_csv(latest_transaction_file)
+        db.session.query(Transaction).delete()
+        for index, row in transaction_df.iterrows():
+            transaction = Transaction(basket_num=row[0], hshd_num=row[1], purchase_date=row[2], product_num=row[3], spend=row[4], units=row[5], store_r=row[6], week_num=row[7], year=row[8])
+            db.session.add(transaction)
+        db.session.commit()
+
+    # Load the most recent Household file
+    household_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'household' in f]
+    if len(household_files) > 0:
+        latest_household_file = max(household_files, key=os.path.getctime)
+        household_df = pd.read_csv(latest_household_file)
+        db.session.query(Household).delete()
+        for index, row in household_df.iterrows():
+            household = Household(hshd_num=row[0], l=row[1], age_range=row[2], marital=row[3], income_range=row[4], homeowner=row[5], hshd_composition=row[6], hh_size=row[7], children=row[8])
+            db.session.add(household)
+        db.session.commit()
+
+    # Load the most recent Product file
+    product_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'product' in f]
+    if len(product_files) > 0:
+        latest_product_file = max(product_files, key=os.path.getctime)
+        product_df = pd.read_csv(latest_product_file)
+        db.session.query(Product).delete()
+        for index, row in product_df.iterrows():
+            product = Product(product_num=row[0], department=row[1], brand_ty=row[2], natural_organic_flag=row[3])
+            db.session.add(product)
+        db.session.commit()
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
@@ -162,39 +195,13 @@ def dashboard():
     if request.method == 'POST':
         # Define the path to the directory where the files are stored
         data_dir = os.path.join(app.root_path, 'data')
+        try:
+           _thread.start_new_thread( load_data, (data_dir, ))
+        except:
+           print ("Error: unable to start thread")
 
         # Load the most recent Transaction file
-        transaction_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'transaction' in f]
-        if len(transaction_files) > 0:
-            latest_transaction_file = max(transaction_files, key=os.path.getctime)
-            transaction_df = pd.read_csv(latest_transaction_file)
-            db.session.query(Transaction).delete()
-            for index, row in transaction_df.iterrows():
-                transaction = Transaction(basket_num=row[0], hshd_num=row[1], purchase_date=row[2], product_num=row[3], spend=row[4], units=row[5], store_r=row[6], week_num=row[7], year=row[8])
-                db.session.add(transaction)
-            db.session.commit()
-
-        # Load the most recent Household file
-        household_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'household' in f]
-        if len(household_files) > 0:
-            latest_household_file = max(household_files, key=os.path.getctime)
-            household_df = pd.read_csv(latest_household_file)
-            db.session.query(Household).delete()
-            for index, row in household_df.iterrows():
-                household = Household(hshd_num=row[0], l=row[1], age_range=row[2], marital=row[3], income_range=row[4], homeowner=row[5], hshd_composition=row[6], hh_size=row[7], children=row[8])
-                db.session.add(household)
-            db.session.commit()
-
-        # Load the most recent Product file
-        product_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'product' in f]
-        if len(product_files) > 0:
-            latest_product_file = max(product_files, key=os.path.getctime)
-            product_df = pd.read_csv(latest_product_file)
-            db.session.query(Product).delete()
-            for index, row in product_df.iterrows():
-                product = Product(product_num=row[0], department=row[1], brand_ty=row[2], natural_organic_flag=row[3])
-                db.session.add(product)
-            db.session.commit()
+        
         flash('Data loaded successfully.')
         return redirect('/dashboard')
 
