@@ -155,7 +155,7 @@ def logout():
     logout_user()
     return redirect('/')
 
-def load_data(data_dir):
+def load_data_trans(data_dir):
     transaction_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'transaction' in f]
     if len(transaction_files) > 0:
         latest_transaction_file = max(transaction_files, key=os.path.getctime)
@@ -166,6 +166,7 @@ def load_data(data_dir):
             db.session.add(transaction)
         db.session.commit()
 
+def load_data_house(data_dir):
     # Load the most recent Household file
     household_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'household' in f]
     if len(household_files) > 0:
@@ -177,6 +178,7 @@ def load_data(data_dir):
             db.session.add(household)
         db.session.commit()
 
+def load_data_prod(data_dir):
     # Load the most recent Product file
     product_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir) if 'product' in f]
     if len(product_files) > 0:
@@ -188,22 +190,26 @@ def load_data(data_dir):
             db.session.add(product)
         db.session.commit()
 
+# transaction, household, product
+@app.route('/load/<file_keyword>', method=['POST'])
+@login_required
+def load_data():
+    data_dir = os.path.join(app.root_path, 'data')
+    if file_keyword == "transaction":
+        load_data_trans(data_dir)
+    elif file_keyword == "household":
+        load_data_house(data_dir)
+    else:
+        load_data_prod(data_dir)
+    
+    flash('Data loaded successfully for {}.'.format(file_keyword))
+    return redirect('/dashboard')
 
-@app.route('/dashboard', methods=['GET', 'POST'])
+
+
+@app.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    if request.method == 'POST':
-        # Define the path to the directory where the files are stored
-        data_dir = os.path.join(app.root_path, 'data')
-        try:
-           _thread.start_new_thread( load_data, (data_dir, ))
-        except:
-           print ("Error: unable to start thread")
-
-        # Load the most recent Transaction file
-        
-        flash('Data loaded successfully.')
-        return redirect('/dashboard')
 
     # Household size vs. total spend
     household_size = db.session.query(Household.hh_size, db.func.sum(Transaction.spend))\
